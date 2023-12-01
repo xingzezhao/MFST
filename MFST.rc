@@ -1,0 +1,58 @@
+[pyModeling input]
+## Number(s) of type(s) of surfactant
+no_surfts = 1
+## Select the surfactants in the database for simulation, separated by space
+surfts_type = DHSB
+## Selection simulation model 'GLG' = gas/liqud/gas 'OLO' = oil/liqud/oil 'L' = neat water
+interfc_type = GLG
+## The number of surfactants added to each interface in the system
+itf_surfts = 20
+
+## Size of water box in nm
+waterbox_size = 10 10 4
+## Size of total box in nm
+simulationbox_size = 10 10 20
+## Name of Simulation System
+simulationsys_name = MD1
+## Path of PACKMOL
+packmolpath = /home/Data/zhaoxz/application/packmol/packmol/packmol
+
+[pySimulating input]
+## Simulated temperature, in K
+Temp = 300
+## Simulation Water Model, SPC SPCE TIP3P TIP4P
+SimuWatMod = spce
+## Equilibrium steps number
+eqnsteps = 1000000
+## Simulation steps number
+simnsteps = 10000000
+## Simulation steps dt, in ps
+dt = 0.001
+## outputfile flames
+outflames = 400
+## short-range electrostatic cutoff (in nm)
+rcoulomb = 1.2
+## short-range neighborlist cutoff (in nm)
+rlist = 1.2
+## short-range van der Waals cutoff (in nm)
+rvdw = 1.2
+## Path of GROMACS
+gmxpath = /home/Data/zhaoxz/application/gromacs/2022.3/bin/gmx
+## Types of POSITIVE ions
+pions = NA
+## Types of NEGATIVE ions
+nions = CL
+## Ion concentration
+conc = 0
+## Energy Minim limit of convergence
+emtol = 400
+## Jobs Ctrl System, Slurm or PBS
+jcrls = Slurm
+## Slurm template path
+sltmpath = ./database/mdFile/runmd.sh
+## Slurm template path
+pbstmpath = ./database/mdFile/runmd.pbs
+
+[pyAnalysing input]
+## Number of Slices during Density Analysis
+Zsl = 400
