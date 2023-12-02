@@ -104,12 +104,15 @@ def energyanl(simpart, config_values):
 
 def split_HTGroup(config_values):
     sn = config_values['simulationsys_name']
-    u = mda.Universe(sn+'.pdb')
+    u = mda.Universe(sn+'_em.gro',sn+'_em.gro')
     surf = []
+    counter = 0
     for i in config_values['surfts_type']:
-        surf.append(u.select_atoms(f'resname {i} and resid 1'))
-    
-    
+        snum = config_values['itf_surfts'][counter]*2
+        surftot = u.select_atoms(f'resname {i}')
+        surf.append(surftot[:int(len(surftot)/snum)])
+        counter += 1
+
     coTl = []
     coHl = []
     Tgl = []
@@ -138,7 +141,7 @@ def split_HTGroup(config_values):
         else:
             print("Error: No hydrophobic tail atoms found.")
 
-    
+
         coT = farthest_atom_pair[0]
         coH = farthest_atom_pair[1]
         Tgroup  = []
@@ -157,8 +160,8 @@ def split_HTGroup(config_values):
         coHl.append(coH)
         Tgl.append(Tgroup)
         Hgl.append(Hgroup)
-        
     return coTl,coHl,Tgl, Hgl
+
 
 def getZdensity(positions,config_values,M):
     Zmax = config_values['simulationbox_list'][2]* 10
@@ -259,7 +262,9 @@ def pyAnalysing_main():
     waterms = sum(u2.masses)
     for i in range(noST):
         surfn = config_values['surfts_type'][i]
-        u1 = mda.Universe(config_values['surfts_type'][i]+'.pdb')
+        u99 = mda.Universe(config_values['simulationsys_name']+'_em.gro')
+        surftot = u99.select_atoms(f'resname {surfn}')
+        u1 = u99.select_atoms(f'resname {surfn}')[:int(len(surftot)/(config_values['itf_surfts'][i]*2))]
         u1Tot = u1.select_atoms('name *')
         u1T = u1.select_atoms(f"name {' '.join(Tgl[i])}")
         u1H = u1.select_atoms(f"name {' '.join(Hgl[i])}")
@@ -462,7 +467,7 @@ def pyAnalysing_main():
     doc.add_paragraph('MFST MolFilmStabTool, is a a full-process automated foam film stability research software')
     doc.add_paragraph('v 1.0')
     doc.add_paragraph('code by Xingze Zhao, you can connect with me by email: xingzezhao@gmail.com or by Github: https://github.com/xingzezhao')
-    doc.add_paragraph('MFST ? 2023 MTSD@UPC')
+    doc.add_paragraph('MFST © 2023 MTSD@UPC')
     doc.save(f'{sn}_report.docx')
     os.chdir(MFST_path)
     
